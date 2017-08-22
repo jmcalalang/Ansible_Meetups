@@ -2,9 +2,6 @@
 F5 builds and contributes to Ansible via social coding on Github. Once a version has passed testing it is submitted to Ansible and rolled into the next version release. As Ansible can accepted side loaded modules, if a release cycle is delayed or if you would like to contribute, the repository is below, you can also ***Watch*** this for changes.
 [F5 Network's Ansible Modules](https://github.com/F5Networks/f5-ansible/tree/devel/library)
 
-## Social Coding with Github
-[![Social Coding with Github](https://img.youtube.com/vi/vTiINnsHSc4/0.jpg)](https://youtu.be/vTiINnsHSc4 "Social Coding with Github")
-
 ## F5 Super NetOps Container (Ansible Variant)
 F5 has created an MVP solution for getting up and running with Ansible, the MVP includes the needed dependencies such as Ansible, Python, f5-python-sdk, bigsuds, ect. The MVP is delivered via code in this repository and runs in the F5 Super-Netops Container via ***Docker***. If you do not have Docker installed you can [Installing Ansible on a Mac Documentation](docs/INSTALL.md) directly.
 
@@ -72,7 +69,7 @@ the bigip_device_ntp module is a subdirectory under the onboarding role and has 
 set_ntp.yml (*roles/tasks/bigip_device_ntp/set_ntp.yml*).
 
 ## Ansible Playbooks
-The playbooks in in the ansible playbook directory include the roles. For our demo and MVP we will be executing the **onboarding** Playbook.
+The playbooks in in the ansible playbook directory include the roles. For our demo and MVP we will be executing the **operation** Playbook.
 
 ```
 $ANSIBLE_HOME_DIRECTORY/site.yml
