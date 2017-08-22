@@ -1,6 +1,6 @@
 ## F5 & Ansible Meetups - Setup and Demo
 
-This repository has been created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible
+This repository has been created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible. For our demo purposes we are going to run an ***Operations*** playbook, this will demo the creation of new objects (Nodes, Pools, Profiles, iRules and Virtual Servers) along with an App_Svcs iApp deployed. Since the Ansbile modules are [Idempotent](http://www.restapitutorial.com/lessons/idempotency.html) these same calls could be reused for updating a service as needed. After the services are deployed we will teardown the created items, showing lifecycle of application from a code perspective.
 ___
 
 ## Tool Kits
@@ -53,6 +53,7 @@ The hosts file is used as a list of Ansible Endpoints, in our case this MVP is c
 
 ### main.yml File
 This file contains the variables used in the scripts we will be executing, there is currently a main.yml for every playbook, our ***operations*** playbook will utilize this file to create things like Nodes/Pools and Virtual Servers
+
 [main.yml](roles/operations/tasks/main.yml)
 ___
 
