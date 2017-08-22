@@ -1,3 +1,8 @@
+## F5 & Ansible Meetups - Setup and Demo
+___
+
+This repository was created to help F5 engineers demo the capabilities of F5 configured via Ansible
+
 ## Tool Kits
 ___
 
@@ -68,7 +73,103 @@ The exposed ports on the Super NetOps Container are used to interact with the so
 4. After a successful launch of the Super NetOps Container with the Ansible MVP code you should be dropped into a Shell
 
 ```
+docker run -p 8080:80 -p 2222:22 --rm -it -v "/Volumes/JC Drive/GitHub Repository/Ansible_Meetups/misc/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=develop f5devcentral/f5-super-netops-container:develop-ansible
+[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
+[s6-init] ensuring user provided files have correct perms...exited 0.
+[fix-attrs.d] applying ownership & permissions fixes...
+[fix-attrs.d] done.
+[cont-init.d] executing container initialization scripts...
+[cont-init.d] done.
+[services.d] starting services
+[services.d] done.
+[environment] SNOPS_HOST_SSH=2222
+[environment] SNOPS_REPO=https://github.com/f5devcentral/f5-super-netops-container.git
+[environment] SNOPS_AUTOCLONE=1
+[environment] SNOPS_HOST_IP=172.17.0.2
+[environment] SNOPS_ISALIVE=1
+[environment] SNOPS_GIT_HOST=github.com
+[environment] SNOPS_REVEALJS_DEV=0
+[environment] SNOPS_HOST_HTTP=8080
+[environment] SNOPS_IMAGE=ansible
+[environment] SNOPS_GH_BRANCH=develop
+Reticulating splines...
+Becoming self-aware...
+[cloneGitRepos] Retrieving repository list from https://github.com/f5devcentral/f5-super-netops-container.git#develop
+[updateRepos] Processing /tmp/snops-repo/images/ansible/fs/etc/snopsrepo.d/ansible.json
+[updateRepos]  Processing /tmp/snops-repo/images/base/fs/etc/snopsrepo.d/base.json
+[updateRepos] Processing /tmp/user_repos.json
+[cloneGitRepos] Loading repositories from /home/snops/repos.json
+[cloneGitRepos] Found 9 repositories to clone...
+[cloneGitRepos][1/9] Cloning f5-sphinx-theme#master from https://github.com/f5devcentral/f5-sphinx-theme.git
+[cloneGitRepos][1/9]  Installing f5-sphinx-theme#master
+[cloneGitRepos][2/9] Cloning f5-super-netops-container#develop from https://github.com/f5devcentral/f5-super-netops-container.git
+[cloneGitRepos][2/9]  Installing f5-super-netops-container#develop
+[cloneGitRepos][3/9] Cloning f5-application-services-integration-iApp#master from https://github.com/F5Networks/f5-application-services-integration-iApp.git
+[cloneGitRepos][3/9]  Installing f5-application-services-integration-iApp#master
+[cloneGitRepos][4/9] Cloning f5-postman-workflows#develop from https://github.com/0xHiteshPatel/f5-postman-workflows.git
+[cloneGitRepos][4/9]  Installing f5-postman-workflows#develop
+[cloneGitRepos][5/9] Cloning f5-automation-labs#master from https://github.com/f5devcentral/f5-automation-labs.git
+[cloneGitRepos][5/9]  Installing f5-automation-labs#master
+[cloneGitRepos][6/9] Cloning ultimate-vimrc#master from https://github.com/amix/vimrc.git
+[cloneGitRepos][6/9]  Installing ultimate-vimrc#master
+[cloneGitRepos][7/9] Cloning reveal-js#master from https://github.com/hakimel/reveal.js.git
+[cloneGitRepos][7/9]  Installing reveal-js#master
+[cloneGitRepos][8/9] Cloning f5-ansible#master from https://github.com/F5Networks/f5-ansible.git
+[cloneGitRepos][8/9]  Installing f5-ansible#master
+[cloneGitRepos][9/9] Cloning Ansible_Meetups#master from https://github.com/jmcalalang/Ansible_Meetups.git
+[cloneGitRepos][9/9]  Skipping install
+                                .----------.
+                               /          /
+                              /   ______.'
+                        _.._ /   /_
+                      .' .._/      '''--.
+                      | '  '___          `.
+                    __| |__    `'.         |
+                   |__   __|      )        |
+                      | | ......-'        /
+                      | | \          _..'`
+                      | |  '------'''
+                      | |                      _
+                      |_|                     | |
+ ___ _   _ _ __   ___ _ __          _ __   ___| |_ ___  _ __  ___
+/ __| | | | '_ \ / _ \ '__| ______ | '_ \ / _ \ __/ _ \| '_ \/ __|
+\__ \ |_| | |_) |  __/ |   |______|| | | |  __/ || (_) | |_) \__ \
+|___/\__,_| .__/ \___|_|           |_| |_|\___|\__\___/| .__/|___/
+          | |                                          | |
+          |_|                                          |_|
 
+Welcome to the f5-super-netops-container.  This image has the following
+services running:
+
+ SSH  tcp/22
+ HTTP tcp/80
+
+To access these services you may need to remap ports on your host to the
+local container using the command:
+
+ docker run -p 8080:80 -p 2222:22 -it f5devcentral/f5-super-netops-container:base
+
+From the HOST perspective, this results in:
+
+ localhost:2222 -> f5-super-netops-container:22
+ localhost:8080 -> f5-super-netops-container:80
+
+You can then connect using the following:
+
+ HTTP: http://localhost:8080
+ SSH:  ssh -p 2222 snops@localhost
+
+Default Credentials:
+
+ snops/default
+ root/default
+
+Go forth and automate!
+
+(you can now detach by using Ctrl+P+Q)
+
+[root@f5-super-netops] [/] #
+```
 
 
 
