@@ -1,0 +1,20 @@
+---
+- name: Manage a VIP
+  bigip_virtual_server:
+    server: "{{ inventory_hostname }}"
+    user: "{{ username }}"
+    password: "{{ password }}"
+    description: "{{ description }}"
+    destination: "{{ destination }}"
+    name: "{{ name }}"
+    pool: "{{ pool }}"
+    port: "{{ port }}"
+    snat: "{{ snat }}"
+    all_profiles:
+      - "{{ all_profiles }}"
+    all_rules:
+      - "{{ all_rules }}"
+    validate_certs: "false"
+    state: "{{ state }}"
+  delegate_to: localhost
+...
