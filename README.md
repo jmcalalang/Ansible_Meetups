@@ -52,8 +52,8 @@ The hosts file is used as a list of Ansible Endpoints, in our case this MVP is c
 [hosts](hosts)
 
 ### main.yml File
-This code is the variables used in the scripts we will be executing, out en
-[main.yml](/roles/operations/tasks)
+This file contains the variables used in the scripts we will be executing, there is currently a main.yml for every playbook, our ***operations*** playbook will utilize this file to create things like Nodes/Pools and Virtual Servers
+[main.yml](roles/operations/tasks/main.yml)
 ___
 
 ## Running the Demo
@@ -68,7 +68,7 @@ ___
 
 
 ### Starting the MVP Image
-1. Within the UDF Blueprint there is already a staged ```user_repos.json``` in the home directory of your ```ubuntu``` user, it includes the below:
+1. Within the UDF Blueprint there is already a staged ```user_repos.json``` in the home directory of your ```ubuntu``` user, modify the existing to reflect the below:
 ```
 {
 	"repos": [
@@ -197,7 +197,8 @@ Go forth and automate!
 6. Enter the Ansible-Vault password ```password```
 7. Check BIG-IP A via the GUI for the newly created Node/Pool/Profiles/iRules and Virtual, there was also an App_Svcs iApp deployed.
 8. Run the Ansible ***operations*** Teardown Playbook with Helper Script ```./run_ansible.sh -t```
-9. Check BIG-IP A via the GUI for the removed objects and iApp
+9. Enter the Ansible-Vault password ```password```
+10. Check BIG-IP A via the GUI for the removed objects and iApp
 ___
 
 ## Useful Information about the MVP and Ansible
