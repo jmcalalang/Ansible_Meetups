@@ -1,6 +1,6 @@
 ## F5 & Ansible Meetups - Setup and Demo
 
-### This repository was created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible
+This repository has been created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible
 ___
 
 ## Tool Kits
@@ -46,8 +46,8 @@ The Ansible-Vault password for the password.yml file is *password*
 ### hosts File
 The hosts file is used as a list of Ansible Endpoints, in our case this MVP is configured to execute on only a single specified host, changing this to your host(s) will allow you to run this demonstration against in your environment
 ```
-[BIGI-IP]
-10.1.1.5
+[BIG-IPA]
+10.1.1.6
 ```
 [hosts](hosts)
 
@@ -58,21 +58,43 @@ ___
 
 ## Running the Demo
 
+### For F5 Engineer Demo Purposes a UDF BluePrint has been created, the ```main.yml```, ```hosts```, ```Ansible-Vault``` have all been configured to use UDF, if you are running this demo from another environment you will need to update those files respectivly
+1. Login to UDF via Federate
+2. Deploy UDF Blueprint "F5 Super-NetOps & Ansible MVP"
+3. Once deployed make sure you start all VM's
+4. Login to the ```Windows Host``` via RDP (Credentials are user/user)
+5. After you are on the ```Windows Host``` desktop open application Putty (Located on the Task Bar)
+6. From the Putty window connect to the ```Docker Host``` (Credentials are ```ubuntu``` no password)
+
+
 ### Starting the MVP Image
-1. Clone/Download [this repository](https://github.com/jmcalalang/ansible_f5)
-2. Once the Clone/Download is complete, note the location of the newly downloaded repository, you will need to specify the ***Full Path*** in the container launch script
-3. Launch the container with the command below
+1. Within the UDF Blueprint there is already a staged ```user_repos.json``` in the home directory of your ```ubuntu``` user, it includes the below:
+```
+{
+	"repos": [
+		{
+			"name":"Ansible_Meetups",
+			"repo":"https://github.com/jmcalalang/Ansible_Meetups.git",
+			"branch":"master",
+			"skip":false,
+			"skipinstall":true
+		}
+	]
+}
+```
+2. Launch the container from the shell of the ```Docker Host```
 
 ```
-docker run -p 8080:80 -p 2222:22 --rm -it -v "/GitHub Repository/Ansible_Meetups/misc/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=master f5devcentral/f5-super-netops-container:ansible
-```
-
-The exposed ports on the Super NetOps Container are used to interact with the solution, after the docker run command completes you will be placed directly into the container via a shell, this interaction can also be used instead of creating an SSH session to the container after being started. More instructions on the Super Netops Container [F5 Programmability Lab Class 2 - Super-NetOps-Container](http://clouddocs.f5.com/training/community/programmability/html/class2/class2.html) & [F5 Docker Hub ](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
-
-4. After a successful launch of the Super NetOps Container with the Ansible MVP code you should be dropped into a Shell
+sudo docker run -p 8080:80 -p 2222:22 --rm -it -v "/home/ubuntu/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=master f5devcentral/f5-super-netops-container:ansible
 
 ```
-docker run -p 8080:80 -p 2222:22 --rm -it -v "/Volumes/JC Drive/GitHub Repository/Ansible_Meetups/misc/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=develop f5devcentral/f5-super-netops-container:develop-ansible
+
+The exposed ports on the Super NetOps Container are used to interact with the solution, after the docker run command completes you will be placed directly into the container via a shell, this shell interaction will be used instead of creating another SSH session to the container. More instructions on the Super Netops Container [F5 Programmability Lab Class 2 - Super-NetOps-Container](http://clouddocs.f5.com/training/community/programmability/html/class2/class2.html) & [F5 Docker Hub ](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
+
+3. After a successful launch of the Super NetOps Container with the Ansible MVP code you should be dropped into a Shell
+
+```
+ubuntu@ip-10-1-1-4:~$ sudo docker run -p 8080:80 -p 2222:22 --rm -it -v "/home/ubuntu/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=master f5devcentral/f5-super-netops-container:ansible
 [s6-init] making user provided files available at /var/run/s6/etc...exited 0.
 [s6-init] ensuring user provided files have correct perms...exited 0.
 [fix-attrs.d] applying ownership & permissions fixes...
@@ -90,10 +112,10 @@ docker run -p 8080:80 -p 2222:22 --rm -it -v "/Volumes/JC Drive/GitHub Repositor
 [environment] SNOPS_REVEALJS_DEV=0
 [environment] SNOPS_HOST_HTTP=8080
 [environment] SNOPS_IMAGE=ansible
-[environment] SNOPS_GH_BRANCH=develop
+[environment] SNOPS_GH_BRANCH=master
 Reticulating splines...
 Becoming self-aware...
-[cloneGitRepos] Retrieving repository list from https://github.com/f5devcentral/f5-super-netops-container.git#develop
+[cloneGitRepos] Retrieving repository list from https://github.com/f5devcentral/f5-super-netops-container.git#master
 [updateRepos] Processing /tmp/snops-repo/images/ansible/fs/etc/snopsrepo.d/ansible.json
 [updateRepos]  Processing /tmp/snops-repo/images/base/fs/etc/snopsrepo.d/base.json
 [updateRepos] Processing /tmp/user_repos.json
@@ -101,8 +123,8 @@ Becoming self-aware...
 [cloneGitRepos] Found 9 repositories to clone...
 [cloneGitRepos][1/9] Cloning f5-sphinx-theme#master from https://github.com/f5devcentral/f5-sphinx-theme.git
 [cloneGitRepos][1/9]  Installing f5-sphinx-theme#master
-[cloneGitRepos][2/9] Cloning f5-super-netops-container#develop from https://github.com/f5devcentral/f5-super-netops-container.git
-[cloneGitRepos][2/9]  Installing f5-super-netops-container#develop
+[cloneGitRepos][2/9] Cloning f5-super-netops-container#master from https://github.com/f5devcentral/f5-super-netops-container.git
+[cloneGitRepos][2/9]  Installing f5-super-netops-container#master
 [cloneGitRepos][3/9] Cloning f5-application-services-integration-iApp#master from https://github.com/F5Networks/f5-application-services-integration-iApp.git
 [cloneGitRepos][3/9]  Installing f5-application-services-integration-iApp#master
 [cloneGitRepos][4/9] Cloning f5-postman-workflows#develop from https://github.com/0xHiteshPatel/f5-postman-workflows.git
@@ -168,19 +190,15 @@ Go forth and automate!
 (you can now detach by using Ctrl+P+Q)
 
 [root@f5-super-netops] [/] #
+
 ```
-
-
-
-
-
-
-
-
-
-
-
-
+4. Change directory to the mapped Repository ```cd /home/snops/Ansible_Meetups```
+5. Run the Ansible ***operations*** Create Playbook with Helper Script ```./run_ansible.sh -o```
+6. Enter the Ansible-Vault password ```password```
+7. Check BIG-IP A via the GUI for the newly created Node/Pool/Profiles/iRules and Virtual, there was also an App_Svcs iApp deployed.
+8. Run the Ansible ***operations*** Teardown Playbook with Helper Script ```./run_ansible.sh -t```
+9. Check BIG-IP A via the GUI for the removed objects and iApp
+___
 
 ## Useful Information about the MVP and Ansible
 
