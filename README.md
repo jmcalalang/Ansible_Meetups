@@ -1,11 +1,9 @@
 ## F5 & Ansible Meetups - Setup and Demo
-__
 
-This repository was created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible
-__
+### This repository was created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible
+___
 
 ## Tool Kits
-__
 
 ### Ansible
 F5 builds and contributes to Ansible via social coding on Github. Once a version has passed testing it is submitted to Ansible and rolled into the next version release. As Ansible can accepted side loaded modules, if a release cycle is delayed or if you would like to contribute, the repository is below, you can also ***Watch*** this for changes.
@@ -15,10 +13,9 @@ F5 builds and contributes to Ansible via social coding on Github. Once a version
 F5 has created an MVP solution for getting up and running with Ansible, the MVP includes the needed dependencies such as Ansible, Python, f5-python-sdk, bigsuds, ect. The MVP is delivered via code in this repository and runs in the F5 Super-Netops Container via ***Docker***. If you do not have Docker installed you can [Installing Ansible on a Mac Documentation](docs/INSTALL.md) directly.
 
 The Super NetOps Container Variant (Ansible) we will be working with can be viewed on [Docker Hub](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
-__
+___
 
 ## Important Files within the MVP
-__
 
 ### user_repos.json File
 The user_repos.json file is used to dynamically pull down whatever Github repository is specified, this enables continuously delivery of new content every time the container is started, or the repositories are refreshed. This also allows you to specify your own newly downloaded repository for future use against your custom environment.
@@ -57,9 +54,9 @@ The hosts file is used as a list of Ansible Endpoints, in our case this MVP is c
 ### main.yml File
 This code is the variables used in the scripts we will be executing, out en
 [main.yml](/roles/operations/tasks)
+___
 
 ## Running the Demo
-__
 
 ### Starting the MVP Image
 1. Clone/Download [this repository](https://github.com/jmcalalang/ansible_f5)
@@ -186,7 +183,6 @@ Go forth and automate!
 
 
 ## Useful Information about the MVP and Ansible
-__
 
 ### Module Documentation
 The MVP is also already setup with some working modules, for a more in-depth view of the modules we will be working with:
@@ -232,6 +228,7 @@ autocmd FileType yaml setlocal ai ts=2 sw=2 et colorcolumn=1,3,5,7,9,11,13 nu
 
 ## Infrastructure as Code Principles, Practices and Patterns
 [Infrastructure as Code Benefits](docs/IAC.md)
+___
 
 ## License
 __
