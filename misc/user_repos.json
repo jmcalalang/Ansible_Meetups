@@ -1,8 +1,8 @@
 {
 	"repos": [
 		{
-			"name":"jmcalalang-ansible_f5",
-			"repo":"https://github.com/jmcalalang/ansible_f5.git",
+			"name":"Ansible_Meetups",
+			"repo":"https://github.com/jmcalalang/Ansible_Meetups.git",
 			"branch":"master",
 			"skip":false,
 			"skipinstall":true
