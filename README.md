@@ -62,10 +62,10 @@ ___
 ### For F5 Engineers a UDF Blueprint has been created, the ```main.yml```, ```hosts```, ```Ansible-Vault``` have all been configured to use UDF, you will need to modify the ```user_repos.json``` file as the UDF Blueprint is used for several different solutions. If you are running this demo from another environment you will need to update those files respectively
 1. Login to UDF via Federate
 2. Deploy UDF Blueprint "F5 Super-NetOps & Ansible MVP"
-![image_003](/misc/images/image_003.png){:height="50%" width="50%"}
+![image_003](/misc/images/image_003.png width="250")
 3. Once deployed, make sure you start all VM's
 4. Login to the ```Windows Host``` via RDP (Credentials are user/user)
-![image_004](/misc/images/image_004.png){:height="50%" width="50%"}
+![image_004](/misc/images/image_004.png width="250")
 5. After you are on the ```Windows Host``` open application Putty (Located on the Task Bar)
 6. From the Putty window connect to the ```Docker Host``` (Credentials are ```ubuntu``` no password)
 ![image_001](/misc/images/image_001.png)
@@ -199,13 +199,13 @@ Go forth and automate!
 ```
 4. Change directory to the user_repos.json mapped Repository ```cd /home/snops/Ansible_Meetups```
 5. Open Chrome from the ```Windows Host``` and validate the ```LAMP``` bookmark does not load, also verify via the ```BIG-IP A``` bookmark (Credentials admin/admin) the configuration is blank, no objects exist yet
-![image_005](/misc/images/image_005.png){:height="50%" width="50%"}
+![image_005](/misc/images/image_005.png)
 ![image_011](/misc/images/image_011.png)
 6. Return to the MVP and run the Ansible ***operations*** Playbook with Helper Script ```./run_ansible.sh -o```
 7. Enter the Ansible-Vault password ```password```
-![image_006](/misc/images/image_006.png){:height="50%" width="50%"}
+![image_006](/misc/images/image_006.png)
 8. Verify the Ansible Run success
-![image_007](/misc/images/image_007.png){:height="50%" width="50%"}
+![image_007](/misc/images/image_007.png)
 9. Check BIG-IP A via the GUI for the newly created Node/Pool/Profiles/iRules and Virtual, and also the App_Svcs iApp deployment. The ```LAMP``` bookmark should also now function, loading the BIG-IP platform page
 10. Run the Ansible ***operations*** Teardown Playbook with Helper Script ```./run_ansible.sh -t```
 11. Enter the Ansible-Vault password ```password```
