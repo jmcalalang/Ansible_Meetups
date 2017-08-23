@@ -62,10 +62,10 @@ ___
 ### For F5 Engineers a UDF Blueprint has been created, the ```main.yml```, ```hosts```, ```Ansible-Vault``` have all been configured to use UDF, you will need to modify the ```user_repos.json``` file as the UDF Blueprint is used for several different solutions. If you are running this demo from another environment you will need to update those files respectively
 1. Login to UDF via Federate
 2. Deploy UDF Blueprint "F5 Super-NetOps & Ansible MVP"
-![image_003](/misc/images/image_003.png width="250")
+![image_003](/misc/images/image_003.png)
 3. Once deployed, make sure you start all VM's
 4. Login to the ```Windows Host``` via RDP (Credentials are user/user)
-![image_004](/misc/images/image_004.png width="250")
+![image_004](/misc/images/image_004.png)
 5. After you are on the ```Windows Host``` open application Putty (Located on the Task Bar)
 6. From the Putty window connect to the ```Docker Host``` (Credentials are ```ubuntu``` no password)
 ![image_001](/misc/images/image_001.png)
