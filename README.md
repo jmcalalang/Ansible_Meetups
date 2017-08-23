@@ -1,16 +1,16 @@
 ## F5 & Ansible Meetups - Setup and Demo
 
-This repository has been created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible. For our demo purposes we are going to run an ***Operations*** playbook, this will demo the creation of new objects (Nodes, Pools, Profiles, iRules and Virtual Servers) along with an App_Svcs iApp deployed. Since the Ansbile modules are [Idempotent](http://www.restapitutorial.com/lessons/idempotency.html) these same calls could be reused for updating a service as needed. After the services are deployed we will teardown the created items, showing lifecycle of application from a code perspective.
+This repository has been created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible. For our demo purposes we will run an ***Operations*** playbook, this quick demo will create new objects (Nodes, Pool, Profiles, iRules and Virtual Server), along with upload and configure an App_Svcs iApp. Since the Ansible modules are [Idempotent](http://www.restapitutorial.com/lessons/idempotency.html), the same calls can be used for updating a service as needed. After the services are deployed we will teardown the created items, showing lifecycle of an application from a code perspective.
 ___
 
 ## Tool Kits
 
 ### Ansible
-F5 builds and contributes to Ansible via social coding on Github. Once a version has passed testing it is submitted to Ansible and rolled into the next version release. As Ansible can accepted side loaded modules, if a release cycle is delayed or if you would like to contribute, the repository is below, you can also ***Watch*** this for changes.
+F5 builds and contributes to Ansible via [Social Coding](https://youtu.be/vTiINnsHSc4) with Github. Once a version has passed testing it is submitted to Ansible and rolled into the next version release. F5 modules can come from software editions of Ansible (2.1,2.2,2.3 ect), or can be side-loaded via an Ansible library path. If you would like to contribute, view whats available or acquire modules to side-load, the repository is below, you can also ***Watch*** this for changes/fixes.
 [F5 Network's Ansible Modules](https://github.com/F5Networks/f5-ansible/tree/devel/library)
 
 ### F5 Super NetOps Container (Ansible Variant)
-F5 has created an MVP solution for getting up and running with Ansible, the MVP includes the needed dependencies such as Ansible, Python, f5-python-sdk, bigsuds, ect. The MVP is delivered via code in this repository and runs in the F5 Super-Netops Container via ***Docker***. If you do not have Docker installed you can [Installing Ansible on a Mac Documentation](docs/INSTALL.md) directly.
+F5 has created an MVP solution for getting up and running with Ansible and BIG-IP/iWorkflow. The MVP includes the needed dependencies such as Ansible, Python, f5-python-sdk, bigsuds, ect. The MVP is delivered via code in this repository and runs within the F5 Super NetOps Container via ***Docker***. If you do not have Docker installed you can [Install Ansible on a Mac Doc](docs/INSTALL.md) directly.
 
 The Super NetOps Container Variant (Ansible) we will be working with can be viewed on [Docker Hub](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
 ___
@@ -18,7 +18,7 @@ ___
 ## Important Files within the MVP
 
 ### user_repos.json File
-The user_repos.json file is used to dynamically pull down whatever Github repository is specified, this enables continuously delivery of new content every time the container is started, or the repositories are refreshed. This also allows you to specify your own newly downloaded repository for future use against your custom environment.
+The user_repos.json file is used to dynamically pull down whatever Github repository is specified in its json body. Utilizing this enables Continuously Delivery of new content every time the container is started, or the repositories are refreshed. This also allows you to specify your own downloaded/forked/cloned repository for use against your custom environment.
 
 ```
 {
@@ -36,15 +36,15 @@ The user_repos.json file is used to dynamically pull down whatever Github reposi
 [user_repos.json](misc/user_repos.json)
 
 ### Ansible Vault
-This MVP code leverages the Ansible-Vault tool, and includes the encrypted password protected file [password.yml](password.yml). The Vault is used to contain the credentials of the BIG-IP(s) we'll be working with, in our demo environment the BIG-IP credentials are "admin" and "password", in your environment these will likely be different, change them as needed.
-To edit the username and password run from the root of the Repository:
+This MVP code leverages the Ansible-Vault tool, the MVP includes an encrypted password protected file [password.yml](password.yml) for use with playbooks. The Ansible-Vault password.yml file contains the credentials of the BIG-IP we'll be working with, in our demo environment the BIG-IP credentials are "admin" and "password", in your environment these will likely be different, change them as needed.
+To edit password.yml for different a username and password, run the following command from the repository directory in the Super NetOps Container.
 ```
 ansible-vault edit password.yml
 ```
 The Ansible-Vault password for the password.yml file is *password*
 
 ### hosts File
-The hosts file is used as a list of Ansible Endpoints, in our case this MVP is configured to execute on only a single specified host, changing this to your host(s) will allow you to run this demonstration against in your environment
+The hosts file is used as a list of Ansible endpoints, in our case the MVP is configured to execute on only a single specified host, changing this to your host(s) will allow you to run this demonstration against in your environment
 ```
 [BIG-IPA]
 10.1.1.6
@@ -52,24 +52,28 @@ The hosts file is used as a list of Ansible Endpoints, in our case this MVP is c
 [hosts](hosts)
 
 ### main.yml File
-This file contains the variables used in the scripts we will be executing, there is currently a main.yml for every playbook, our ***operations*** playbook will utilize this file to create things like Nodes/Pools and Virtual Servers
+This file contains the variables used in the various Ansible scripts we will be executing, changing the variables in this file reflect what Ansible will deploy to a BIG-IP, for custom environments this **will need** to be modified. In the MVP there are currently main.yml files for every playbook; our demo ***operations*** playbook will utilize an already configured one to create things like Nodes/Pools and Virtual Servers.
 
 [main.yml](roles/operations/tasks/main.yml)
 ___
 
 ## Running the Demo
 
-### For F5 Engineer Demo Purposes a UDF BluePrint has been created, the ```main.yml```, ```hosts```, ```Ansible-Vault``` have all been configured to use UDF, if you are running this demo from another environment you will need to update those files respectivly
+### For F5 Engineers a UDF Blueprint has been created, the ```main.yml```, ```hosts```, ```Ansible-Vault``` have all been configured to use UDF, you will need to modify the ```user_repos.json``` file as the UDF Blueprint is used for several different solutions. If you are running this demo from another environment you will need to update those files respectively
 1. Login to UDF via Federate
 2. Deploy UDF Blueprint "F5 Super-NetOps & Ansible MVP"
-3. Once deployed make sure you start all VM's
+![Docker Host](/misc/images/image_003.png)
+3. Once deployed, make sure you start all VM's
 4. Login to the ```Windows Host``` via RDP (Credentials are user/user)
-5. After you are on the ```Windows Host``` desktop open application Putty (Located on the Task Bar)
+![Docker Host](/misc/images/image_004.png)
+5. After you are on the ```Windows Host``` open application Putty (Located on the Task Bar)
 6. From the Putty window connect to the ```Docker Host``` (Credentials are ```ubuntu``` no password)
+![Docker Host](/misc/images/image_001.png)
+![Docker Host](/misc/images/image_002.png)
 
 
 ### Starting the MVP Image
-1. Within the UDF Blueprint there is already a staged ```user_repos.json``` in the home directory of your ```ubuntu``` user, modify the existing to reflect the below:
+1. Within the UDF Blueprint there is already a staged ```user_repos.json``` in the home directory (/home/ubuntu/user_repos.json) of your ```ubuntu``` user, modify the existing user_repos.json to reflect the below. [VI](https://www.cs.colostate.edu/helpdocs/vi.html) is installed on the Docker Server for you, and works as expected.
 ```
 {
 	"repos": [
@@ -83,16 +87,16 @@ ___
 	]
 }
 ```
-2. Launch the container from the shell of the ```Docker Host```
+2. Launch the container with the command below from the shell window of the ```Docker Host```
 
 ```
 sudo docker run -p 8080:80 -p 2222:22 --rm -it -v "/home/ubuntu/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=master f5devcentral/f5-super-netops-container:ansible
 
 ```
 
-The exposed ports on the Super NetOps Container are used to interact with the solution, after the docker run command completes you will be placed directly into the container via a shell, this shell interaction will be used instead of creating another SSH session to the container. More instructions on the Super Netops Container [F5 Programmability Lab Class 2 - Super-NetOps-Container](http://clouddocs.f5.com/training/community/programmability/html/class2/class2.html) & [F5 Docker Hub ](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
+The exposed ports on the Super NetOps Container are used to interact with the container solution; after the docker run command completes you will be placed directly into the Super NetOps Container shell, we'll use shell interaction to run the MVP, thought the Super NetOps Container does have an exposed SSH port to allow direct connections. More information on the Super NetOps Container can be found in [F5 Programmability Lab Class 2 - Super-NetOps-Container](http://clouddocs.f5.com/training/community/programmability/html/class2/class2.html) & [F5 Docker Hub ](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
 
-3. After a successful launch of the Super NetOps Container with the Ansible MVP code you should be dropped into a Shell
+3. After a successful launch of the Super NetOps Container with the Ansible MVP you should be dropped into a Shell
 
 ```
 ubuntu@ip-10-1-1-4:~$ sudo docker run -p 8080:80 -p 2222:22 --rm -it -v "/home/ubuntu/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=master f5devcentral/f5-super-netops-container:ansible
@@ -193,10 +197,11 @@ Go forth and automate!
 [root@f5-super-netops] [/] #
 
 ```
-4. Change directory to the mapped Repository ```cd /home/snops/Ansible_Meetups```
-5. Run the Ansible ***operations*** Create Playbook with Helper Script ```./run_ansible.sh -o```
+4. Change directory to the user_repos.json mapped Repository ```cd /home/snops/Ansible_Meetups```
+5. Run the Ansible ***operations*** Playbook with Helper Script ```./run_ansible.sh -o```
 6. Enter the Ansible-Vault password ```password```
-7. Check BIG-IP A via the GUI for the newly created Node/Pool/Profiles/iRules and Virtual, there was also an App_Svcs iApp deployed.
+7. Check BIG-IP A via the GUI for the newly created Node/Pool/Profiles/iRules and Virtual, and also the App_Svcs iApp deployment.
+![Docker Host](/misc/images/image_005.png)
 8. Run the Ansible ***operations*** Teardown Playbook with Helper Script ```./run_ansible.sh -t```
 9. Enter the Ansible-Vault password ```password```
 10. Check BIG-IP A via the GUI for the removed objects and iApp
@@ -205,11 +210,11 @@ ___
 ## Useful Information about the MVP and Ansible
 
 ### Module Documentation
-The MVP is also already setup with some working modules, for a more in-depth view of the modules we will be working with:
+The MVP is also already setup all current F5 modules, for a more in-depth view of the modules we will be working with:
 [Ansible Module Documents Used in this Collection](docs/MODULES.md)
 
 ### Ansible Roles
-This ansible repository is organized into roles. Roles are collections of templates, files, tasks,
+This Ansible repository is organized into roles. Roles are collections of templates, files, tasks,
 and variables. Tasks are organized based on the particular module they are implementing. For example,
 the bigip_device_ntp module is a subdirectory under the onboarding role and has a task
 set_ntp.yml (*roles/tasks/bigip_device_ntp/set_ntp.yml*).
