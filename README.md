@@ -211,9 +211,10 @@ Go forth and automate!
 11. Enter the Ansible-Vault password ```password```
 ![image_009](/misc/images/image_009.png)
 12. Verify the Ansible Run success
-![image_010](/misc/images/image_0010.png)
+![image_010](/misc/images/image_010.png)
 13. Check BIG-IP A via the GUI for the removed objects and iApp
 ![image_011](/misc/images/image_011.png)
+14. Demo complete, eat Cake.
 ___
 
 ## Useful Information about the MVP and Ansible
