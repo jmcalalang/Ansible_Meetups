@@ -4,22 +4,22 @@
 ############
 - include: bigip_node/add_node.yml
   vars:
-    - host: "10.0.2.167"
-    - name: "member1"
+    - host: "10.1.20.11"
+    - name: "Lamp"
     - monitor: "/Common/icmp"
   when: state == "present"
 
 - include: bigip_pool/manage_pool.yml
   vars:
-    - name: "pool1"
+    - name: "Lamp_pl"
     - monitor: "/Common/http_head_f5"
   when: state == "present"
 
 - include: bigip_pool_member/manage_members.yml
   vars:
-    - host: "member1"
-    - pool: "pool1"
-    - port: "8080"
+    - host: "Lamp"
+    - pool: "Lamp_pl"
+    - port: "8081"
   when: state == "present"
 
 - include: bigip_irule/manage_irule.yml
@@ -33,10 +33,10 @@
 
 - include: bigip_virtual_server/manage_vip.yml
   vars:
-    - description: "foo-vip"
-    - destination: "10.0.2.183"
-    - name: "vip1"
-    - pool: "pool1"
+    - description: "Lamp_vs"
+    - destination: "10.1.10.15"
+    - name: "Lamp_vs"
+    - pool: "Lamp_pl"
     - port: "80"
     - snat: "Automap"
     - all_profiles: "http"
@@ -54,10 +54,10 @@
 ###############
 - include: bigip_virtual_server/manage_vip.yml
   vars:
-    - description: "foo-vip"
-    - destination: "10.0.2.183"
-    - name: "vip1"
-    - pool: "pool1"
+    - description: "Lamp_vs"
+    - destination: "10.1.10.15"
+    - name: "Lamp_vs"
+    - pool: "Lamp_pl"
     - port: "80"
     - snat: "Automap"
     - all_profiles: "http"
@@ -75,13 +75,13 @@
 
 - include: bigip_pool/manage_pool.yml
   vars:
-    - name: "pool1"
+    - name: "Lamp_pl"
     - monitor: "/Common/http_head_f5"
   when: state == "absent"
 
 - include: bigip_node/remove_node.yml
   vars:
-    - name: "member1"
+    - name: "Lamp"
     - monitor: "/Common/icmp"
   when: state == "absent"
 
