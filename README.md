@@ -10,7 +10,7 @@ ___
 ## Tool Kits
 
 ### Ansible
-F5 builds and contributes to Ansible via [Social Coding](https://youtu.be/vTiINnsHSc4) with Github. Once a version has passed testing it is submitted to Ansible and rolled into the next version release. F5 modules can come from software editions of Ansible (2.1,2.2,2.3 etc), or can be side-loaded via an Ansible library path. If you would like to contribute, view what’s available, or acquire modules to side-load, the repository is listed below. You can also ***Watch*** this Repository for changes/fixes.
+F5 builds and contributes to Ansible via [Social Coding](https://youtu.be/vTiINnsHSc4) with Github. Once a module has passed testing, it is submitted to Ansible and rolled into the next version release. F5 modules can come from software editions of Ansible (2.1,2.2,2.3 etc), or can be side-loaded by adding an Ansible library path in [ansible.cfg](https://github.com/jmcalalang/Ansible_Meetups/blob/master/ansible.cfg). If you would like to contribute, view what’s available, or acquire modules to side-load, the repository is listed below. You can also ***Watch*** this Repository for changes/fixes/additions.
 [F5 Network's Ansible Modules](https://github.com/F5Networks/f5-ansible/tree/devel/library)
 
 ### F5 Super NetOps Container (Ansible Variant)
