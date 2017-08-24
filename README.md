@@ -204,7 +204,7 @@ Go forth and automate!
 
 ```
 4. Change directory to the user_repos.json mapped Repository ```cd /home/snops/Ansible_Meetups```
-5. Open Chrome from the ```Windows Host``` and validate the ```LAMP``` bookmark does not load, also verify via the ```BIG-IP A``` bookmark (Credentials admin/admin) the configuration is blank, no objects exist yet
+5. Open Chrome from the ```Windows Host``` and validate the ```LAMP``` bookmark does not load, also verify via the ```BIG-IP A``` bookmark (Credentials admin/password) the configuration is blank, no objects exist yet
 ![image_005](/misc/images/image_005.png)
 ![image_011](/misc/images/image_011.png)
 6. Return to the MVP and run the Ansible ***operations*** Playbook with Helper Script ```./run_ansible.sh -o```
