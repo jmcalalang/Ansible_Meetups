@@ -1,16 +1,20 @@
 ## F5 & Ansible Meetups - Setup and Demo
 
-This repository has been created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible. For our demo purposes we will run an ***Operations*** playbook, this quick demo will create new objects (Nodes, Pool, Profiles, iRules and Virtual Server), along with upload and configure an App_Svcs iApp. Since the Ansible modules are [Idempotent](http://www.restapitutorial.com/lessons/idempotency.html), the same modules can be used for updating a service as needed. After the services are deployed we will teardown the created items, showing lifecycle of an application from a code perspective.
+This repository has been created to help F5 engineers demo the capabilities of BIG-IP configured via Ansible. For our demo purposes, we will run an ***Operations*** playbook, this quick demo will create new objects (Nodes, Pool, Profiles, iRules and Virtual Server), along with upload and configure an App_Svcs iApp. Since the Ansible modules are [Idempotent](http://www.restapitutorial.com/lessons/idempotency.html), the same modules can be used for updating a service as needed. After the services are deployed we will tear down the created items, showing lifecycle of an application from a code perspective.
+
+### Order of Operations
+
+The order of operations from beginning to end can be a learning curve; this is because as engineers we're used to modifying configuration directly, with Infrastructure as Code we're setting our desired state in Code and then letting orchestration carry the solution to end (Declarative). The Helper Script is the starting point to executing our Order of Operations; after the desired state is defined (main.yml) we start the process by executing the [Helper Script](https://github.com/jmcalalang/Ansible_Meetups/blob/master/run_ansible.sh), which calls our [Playbook](https://github.com/jmcalalang/Ansible_Meetups/blob/master/playbooks/operations.yml), the Playbook specifies a [Role](https://github.com/jmcalalang/Ansible_Meetups/tree/master/roles/operations) which contains [Tasks](https://github.com/jmcalalang/Ansible_Meetups/tree/master/roles/operations/tasks), the Tasks are controlled in order and with variables defined by our [main.yml](https://github.com/jmcalalang/Ansible_Meetups/blob/master/roles/operations/tasks/main.yml) file. The main.yml file being the desired end state, Tasks, Modules, Role(s) and Playbook(s) get you there.
 ___
 
 ## Tool Kits
 
 ### Ansible
-F5 builds and contributes to Ansible via [Social Coding](https://youtu.be/vTiINnsHSc4) with Github. Once a version has passed testing it is submitted to Ansible and rolled into the next version release. F5 modules can come from software editions of Ansible (2.1,2.2,2.3 ect), or can be side-loaded via an Ansible library path. If you would like to contribute, view whats available or acquire modules to side-load, the repository is below, you can also ***Watch*** this for changes/fixes.
+F5 builds and contributes to Ansible via [Social Coding](https://youtu.be/vTiINnsHSc4) with Github. Once a version has passed testing it is submitted to Ansible and rolled into the next version release. F5 modules can come from software editions of Ansible (2.1,2.2,2.3 etc), or can be side-loaded via an Ansible library path. If you would like to contribute, view what’s available or acquire modules to side-load, the repository is below, you can also ***Watch*** this for changes/fixes.
 [F5 Network's Ansible Modules](https://github.com/F5Networks/f5-ansible/tree/devel/library)
 
 ### F5 Super NetOps Container (Ansible Variant)
-F5 has created an MVP solution for getting up and running with Ansible and BIG-IP/iWorkflow. The MVP includes the needed dependencies such as Ansible, Python, f5-python-sdk, bigsuds, ect. The MVP is delivered via code in this repository and runs within the F5 Super NetOps Container via ***Docker***. If you do not have Docker installed you can [Install Ansible on a Mac Doc](docs/INSTALL.md) directly.
+F5 has created an MVP solution for getting up and running with Ansible and BIG-IP/iWorkflow. The MVP includes the needed dependencies such as Ansible, Python, f5-python-sdk, bigsuds, etc. The MVP is delivered via code in this repository and runs within the F5 Super NetOps Container via ***Docker***. If you do not have Docker installed you can [Install Ansible on a Mac Doc](docs/INSTALL.md) directly.
 
 The Super NetOps Container Variant (Ansible) we will be working with can be viewed on [Docker Hub](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
 ___
@@ -52,7 +56,7 @@ The hosts file is used as a list of Ansible endpoints, in our case the MVP is co
 [hosts](hosts)
 
 ### main.yml File
-This file contains the variables used in the various Ansible scripts we will be executing, changing the variables in this file reflect what Ansible will deploy to a BIG-IP, for custom environments this **will need** to be modified. In the MVP there are currently main.yml files for every playbook; our demo ***operations*** playbook will utilize an already configured one to create things like Nodes/Pools and Virtual Servers.
+This file contains the variables used in the various Ansible scripts we will be executing, changing the variables in this file reflect what Ansible will deploy to a BIG-IP, for custom environments this **will need** to be modified. In the MVP, there are currently main.yml files for every playbook; our demo ***operations*** playbook will utilize an already configured one to create things like Nodes/Pools and Virtual Servers.
 
 [main.yml](roles/operations/tasks/main.yml)
 ___
@@ -170,7 +174,7 @@ services running:
  SSH  tcp/22
  HTTP tcp/80
 
-To access these services you may need to remap ports on your host to the
+To access these services, you may need to remap ports on your host to the
 local container using the command:
 
  docker run -p 8080:80 -p 2222:22 -it f5devcentral/f5-super-netops-container:base
@@ -230,7 +234,7 @@ the bigip_device_ntp module is a subdirectory under the onboarding role and has 
 set_ntp.yml (*roles/tasks/bigip_device_ntp/set_ntp.yml*).
 
 ### Ansible Playbooks
-The playbooks in in the ansible playbook directory include the roles. For our demo and MVP we will be executing the **operation** Playbook.
+The playbooks in in the ansible playbook directory include the roles. For our demo and MVP, we will be executing the **operation** Playbook.
 
 ```
 $ANSIBLE_HOME_DIRECTORY/site.yml
@@ -256,7 +260,7 @@ The MVP is already setup with some configuration, which needs only small modific
 ### Ansible Variable Precedence
 [Ansible 2.x Order of Variable Precedence](docs/PRECEDENCE.md)
 
-### Useful vimrc macro for editing YaML files
+### Useful vimrc macro for editing YAML files
 ```
 autocmd FileType yaml setlocal ai ts=2 sw=2 et colorcolumn=1,3,5,7,9,11,13 nu
 ```
