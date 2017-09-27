@@ -79,7 +79,7 @@ For F5 Engineers a UDF **2.0** Blueprint has been created, the ```main.yml```, `
 
 
 ### Using the MVP Image
-1. Within the ```Docker Host``` is a staged ```user_repos.json``` file, located in the home directory (/home/ubuntu/user_repos.json) of your ```ubuntu``` user. Modify the staged user_repos.json to reflect the below. [VI](https://www.cs.colostate.edu/helpdocs/vi.html) is installed on the Docker Host for you, and works as expected.
+1. Within the ```Docker Host``` is a staged ```user_repos.json``` file, located in the home directory (/home/ubuntu/user_repos.json) of your ```ubuntu``` user. ***You must modify the staged user_repos.json to reflect the below.*** [VI](https://www.cs.colostate.edu/helpdocs/vi.html) is installed on the Docker Host for you, and works as expected.
 ```
 {
 	"repos": [
