@@ -7,6 +7,7 @@
     name: "{{ name }}"
     validate_certs: "false"
     state: "{{ state }}"
+    monitor_type: "and_list"
     monitors:
       - "{{ monitor }}"
   delegate_to: localhost
