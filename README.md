@@ -22,10 +22,10 @@ ___
 ## Important MVP Concepts
 
 ### Extensibility
-The Ansible container will dynamically pull down whatever GitHub repository is specified in a `REPO` environment variable. Utilizing this enables Continuously Delivery of new content every time the container is started, or the repositories are refreshed. This also allows you to specify your own downloaded/forked/cloned repository for use against your custom environment.
+The Ansible container will dynamically pull down whatever GitHub repository is specified in the `REPO` environment variable. Utilizing this enables Continuously Delivery of new content every time the container is started, or the repositories are refreshed. This also allows you to specify your own downloaded/forked/cloned repository for use against your custom environment.
 
 ```shell
--e "REPO=<ghUsername>/<repoName>"
+-e "REPO=<GitHub_Username>/<Repo_Name>"
 ```
 For example:
 ```shell
@@ -76,32 +76,34 @@ For F5 Engineers a UDF **2.0** Blueprint has been created, the ```main.yml```, `
 
 ```
 sudo docker run --rm -it -e "REPO=jmcalalang/Ansible_Meetups" artioml/f5-ansible
-
 ```
 Modify the `REPO` variable accordingly if you are working on your own forked / cloned repository.
 
-2. After the successful launch of the Ansible container you should be dropped into its shell:
+2. After the successful launch of the Ansible container you should be dropped into its shell, and the repo directory:
 
 ```
 ubuntu@ip-10-1-1-4:~$ sudo docker run --rm -it -e "REPO=jmcalalang/Ansible_Meetups" artioml/f5-ansible
-
-
+Cloning into 'Ansible_Meetups'...
+remote: Counting objects: 311, done.
+remote: Total 311 (delta 0), reused 0 (delta 0), pack-reused 311
+Receiving objects: 100% (311/311), 3.19 MiB | 26.80 MiB/s, done.
+Resolving deltas: 100% (94/94), done.
+/opt/ansible/Ansible_Meetups $
 ```
-4. Change directory to the user_repos.json mapped Repository ```cd /home/snops/Ansible_Meetups```
-5. Open Chrome from the ```Windows Host``` and validate the ```LAMP``` bookmark does not load, also verify via the ```BIG-IP A``` bookmark (Credentials admin/password) the configuration is blank, no objects exist yet
+3. Open Chrome from the ```Windows Host``` and validate the ```LAMP``` bookmark does not load, also verify via the ```BIG-IP A``` bookmark (Credentials admin/password) the configuration is blank, no objects exist yet
 ![image_005](/misc/images/image_005.png)
 ![image_011](/misc/images/image_011.png)
 6. Return to the MVP and run the Ansible ***operations*** Playbook with Helper Script ```./run_ansible.sh -o```
 7. Enter the Ansible-Vault password ```password```
-![image_006](/misc/images/image_006.png)
+![image_006](/misc/images/image_006n.png)
 8. Verify the Ansible Run success
-![image_007](/misc/images/image_007.png)
+![image_007](/misc/images/image_007n.png)
 9. Check BIG-IP A via the GUI for the newly created Node/Pool/Profiles/iRules and Virtual, and also the App_Svcs iApp deployment. The ```LAMP``` bookmark should also now function, loading the BIG-IP platform page
 10. Run the Ansible ***operations*** Teardown Playbook with Helper Script ```./run_ansible.sh -t```
 11. Enter the Ansible-Vault password ```password```
-![image_009](/misc/images/image_009.png)
+![image_009](/misc/images/image_009n.png)
 12. Verify the Ansible Run success
-![image_010](/misc/images/image_010.png)
+![image_010](/misc/images/image_010n.png)
 13. Check BIG-IP A via the GUI for the removed objects and iApp
 ![image_011](/misc/images/image_011.png)
 14. Demo complete, eat Cake.
