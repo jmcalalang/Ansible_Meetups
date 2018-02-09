@@ -10,38 +10,31 @@ ___
 ## Tool Kits
 
 ### Ansible
-F5 builds and contributes to Ansible via [Social Coding](https://youtu.be/vTiINnsHSc4) with Github. Once a module has passed testing, it is submitted to Ansible and rolled into the next version release. F5 modules can come from software editions of Ansible (2.1,2.2,2.3 etc), or can be side-loaded by adding an Ansible library path in [ansible.cfg](https://github.com/jmcalalang/Ansible_Meetups/blob/master/ansible.cfg). If you would like to contribute, view what’s available, or acquire modules to side-load, the repository is listed below. You can also ***Watch*** this Repository for changes/fixes/additions.
+F5 builds and contributes to Ansible via [Social Coding](https://youtu.be/vTiINnsHSc4) with Github. Once a module has passed testing, it is submitted to Ansible and rolled into the next version release. F5 modules can come from software editions of Ansible (2.3,2.4 etc.), or can be side-loaded by adding an Ansible library path in [ansible.cfg](https://github.com/jmcalalang/Ansible_Meetups/blob/master/ansible.cfg). If you would like to contribute, view what’s available, or acquire modules to side-load, the repository is listed below. You can also ***Watch*** this Repository for changes/fixes/additions.
 [F5 Network's Ansible Modules](https://github.com/F5Networks/f5-ansible/tree/devel/library)
 
-### F5 Super NetOps Container (Ansible Variant)
-F5 has created an MVP solution for getting up and running with Ansible and BIG-IP/iWorkflow. The MVP includes the needed dependencies such as Ansible, Python, [f5-common-python](https://github.com/F5Networks/f5-common-python), bigsuds, etc. The MVP is delivered via code in this repository and runs within the F5 Super NetOps Container via ***Docker***. If you do not have Docker installed you can [Install Ansible on a Mac Doc](docs/INSTALL.md) directly.
+### Ansible Container
+F5 has created an MVP solution for getting up and running with Ansible and BIG-IP/iWorkflow. The MVP includes the needed dependencies such as Ansible, Python, [f5-common-python](https://github.com/F5Networks/f5-common-python), bigsuds, etc. The MVP is delivered via code in this repository and runs within a container via ***Docker***. If you do not have Docker installed you can [Install Ansible on a Mac Doc](docs/INSTALL.md) directly.
 
-The Super NetOps Container Variant (Ansible) we will be working with can be viewed on [Docker Hub](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
+The minimal Ansible container we will be working with can be viewed on [Docker Hub](https://hub.docker.com/r/artioml/f5-ansible/)
 ___
 
-## Important Files within the MVP
+## Important MVP Concepts
 
-### user_repos.json File
-The user_repos.json file is used to dynamically pull down whatever Github repository is specified in its json body. Utilizing this enables Continuously Delivery of new content every time the container is started, or the repositories are refreshed. This also allows you to specify your own downloaded/forked/cloned repository for use against your custom environment.
+### Extensibility
+The Ansible container will dynamically pull down whatever GitHub repository is specified in the `REPO` environment variable. Utilizing this enables Continuously Delivery of new content every time the container is started, or the repositories are refreshed. This also allows you to specify your own downloaded/forked/cloned repository for use against your custom environment.
 
+```shell
+-e "REPO=<GitHub_Username>/<Repo_Name>"
 ```
-{
-	"repos": [
-		{
-			"name":"Ansible_Meetups",
-			"repo":"https://github.com/jmcalalang/Ansible_Meetups.git",
-			"branch":"master",
-			"skip":false,
-			"skipinstall":true
-		}
-	]
-}
+For example:
+```shell
+sudo docker run --rm -it -e "REPO=jmcalalang/Ansible_Meetups" artioml/f5-ansible
 ```
-[user_repos.json](misc/user_repos.json)
 
 ### Ansible Vault
 This MVP code leverages the Ansible-Vault tool, the MVP includes an encrypted password protected file [password.yml](password.yml) for use with playbooks. The Ansible-Vault password.yml file contains the credentials of the BIG-IP we'll be working with, in our demo environment the BIG-IP credentials are "admin" and "password", in your environment these will likely be different, change them as needed.
-To edit password.yml to a different username and password run the following command from the mapped repository directory in the Super NetOps Container.
+To edit password.yml to a different username and password run the following command from the mapped repository directory in the Ansible container:
 ```
 ansible-vault edit password.yml
 ```
@@ -64,7 +57,7 @@ ___
 ## Running the Demo
 
 ### Staging the Environment
-For F5 Engineers a UDF **2.0** Blueprint has been created, the ```main.yml```, ```hosts```, ```password.yml``` have all been configured to use UDF, you will need to modify the ```user_repos.json``` file, as this UDF Blueprint is used for several different solutions. If you are running this demo from another environment you will need to update all these files respectively.
+For F5 Engineers a UDF **2.0** Blueprint has been created, the ```main.yml```, ```hosts```, ```password.yml``` have all been configured to use UDF. If you are running this demo from another environment, you will need to update all these files respectively.
 
 1. Login to UDF via Federate
 2. Deploy UDF Blueprint "F5 Super-NetOps & Ansible MVP"
@@ -79,145 +72,38 @@ For F5 Engineers a UDF **2.0** Blueprint has been created, the ```main.yml```, `
 
 
 ### Using the MVP Image
-1. Within the ```Docker Host``` is a staged ```user_repos.json``` file, located in the home directory (/home/ubuntu/user_repos.json) of your ```ubuntu``` user. ***You must modify the staged user_repos.json to reflect the below.*** [VI](https://www.cs.colostate.edu/helpdocs/vi.html) is installed on the Docker Host for you, and works as expected.
-```
-{
-	"repos": [
-		{
-			"name":"Ansible_Meetups",
-			"repo":"https://github.com/jmcalalang/Ansible_Meetups.git",
-			"branch":"master",
-			"skip":false,
-			"skipinstall":true
-		}
-	]
-}
-```
-2. Launch the container with the command below from the shell window of the ```Docker Host```
+1. Launch the container with the command below from the shell window of the ```Docker Host```
 
 ```
-sudo docker run -p 8080:80 -p 2222:22 --rm -it -v "/home/ubuntu/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=master f5devcentral/f5-super-netops-container:ansible
+sudo docker run --rm -it -e "REPO=jmcalalang/Ansible_Meetups" artioml/f5-ansible
+```
+Modify the `REPO` variable accordingly if you are working on your own forked / cloned repository.
+
+2. After the successful launch of the Ansible container you should be dropped into its shell, and the repo directory:
 
 ```
-
-The exposed ports on the Super NetOps Container are used to interact with the solution; though the Super NetOps Container does have an exposed SSH port, we'll use the dropped into shell to run the MVP. More information on the Super NetOps Container can be found in [F5 Programmability Lab Class 2 - Super-NetOps-Container](http://clouddocs.f5.com/training/community/programmability/html/class2/class2.html) & [F5 Docker Hub ](https://hub.docker.com/r/f5devcentral/f5-super-netops-container/)
-
-3. After the successful launch of the Super NetOps Container you should be dropped into its shell:
-
+ubuntu@ip-10-1-1-4:~$ sudo docker run --rm -it -e "REPO=jmcalalang/Ansible_Meetups" artioml/f5-ansible
+Cloning into 'Ansible_Meetups'...
+remote: Counting objects: 311, done.
+remote: Total 311 (delta 0), reused 0 (delta 0), pack-reused 311
+Receiving objects: 100% (311/311), 3.19 MiB | 26.80 MiB/s, done.
+Resolving deltas: 100% (94/94), done.
+/opt/ansible/Ansible_Meetups $
 ```
-ubuntu@ip-10-1-1-4:~$ sudo docker run -p 8080:80 -p 2222:22 --rm -it -v "/home/ubuntu/user_repos.json:/tmp/user_repos.json" -e SNOPS_GH_BRANCH=master f5devcentral/f5-super-netops-container:ansible
-[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
-[s6-init] ensuring user provided files have correct perms...exited 0.
-[fix-attrs.d] applying ownership & permissions fixes...
-[fix-attrs.d] done.
-[cont-init.d] executing container initialization scripts...
-[cont-init.d] done.
-[services.d] starting services
-[services.d] done.
-[environment] SNOPS_HOST_SSH=2222
-[environment] SNOPS_REPO=https://github.com/f5devcentral/f5-super-netops-container.git
-[environment] SNOPS_AUTOCLONE=1
-[environment] SNOPS_HOST_IP=172.17.0.2
-[environment] SNOPS_ISALIVE=1
-[environment] SNOPS_GIT_HOST=github.com
-[environment] SNOPS_REVEALJS_DEV=0
-[environment] SNOPS_HOST_HTTP=8080
-[environment] SNOPS_IMAGE=ansible
-[environment] SNOPS_GH_BRANCH=master
-Reticulating splines...
-Becoming self-aware...
-[cloneGitRepos] Retrieving repository list from https://github.com/f5devcentral/f5-super-netops-container.git#master
-[updateRepos] Processing /tmp/snops-repo/images/ansible/fs/etc/snopsrepo.d/ansible.json
-[updateRepos]  Processing /tmp/snops-repo/images/base/fs/etc/snopsrepo.d/base.json
-[updateRepos] Processing /tmp/user_repos.json
-[cloneGitRepos] Loading repositories from /home/snops/repos.json
-[cloneGitRepos] Found 9 repositories to clone...
-[cloneGitRepos][1/9] Cloning f5-sphinx-theme#master from https://github.com/f5devcentral/f5-sphinx-theme.git
-[cloneGitRepos][1/9]  Installing f5-sphinx-theme#master
-[cloneGitRepos][2/9] Cloning f5-super-netops-container#master from https://github.com/f5devcentral/f5-super-netops-container.git
-[cloneGitRepos][2/9]  Installing f5-super-netops-container#master
-[cloneGitRepos][3/9] Cloning f5-application-services-integration-iApp#master from https://github.com/F5Networks/f5-application-services-integration-iApp.git
-[cloneGitRepos][3/9]  Installing f5-application-services-integration-iApp#master
-[cloneGitRepos][4/9] Cloning f5-postman-workflows#develop from https://github.com/0xHiteshPatel/f5-postman-workflows.git
-[cloneGitRepos][4/9]  Installing f5-postman-workflows#develop
-[cloneGitRepos][5/9] Cloning f5-automation-labs#master from https://github.com/f5devcentral/f5-automation-labs.git
-[cloneGitRepos][5/9]  Installing f5-automation-labs#master
-[cloneGitRepos][6/9] Cloning ultimate-vimrc#master from https://github.com/amix/vimrc.git
-[cloneGitRepos][6/9]  Installing ultimate-vimrc#master
-[cloneGitRepos][7/9] Cloning reveal-js#master from https://github.com/hakimel/reveal.js.git
-[cloneGitRepos][7/9]  Installing reveal-js#master
-[cloneGitRepos][8/9] Cloning f5-ansible#master from https://github.com/F5Networks/f5-ansible.git
-[cloneGitRepos][8/9]  Installing f5-ansible#master
-[cloneGitRepos][9/9] Cloning Ansible_Meetups#master from https://github.com/jmcalalang/Ansible_Meetups.git
-[cloneGitRepos][9/9]  Skipping install
-                                .----------.
-                               /          /
-                              /   ______.'
-                        _.._ /   /_
-                      .' .._/      '''--.
-                      | '  '___          `.
-                    __| |__    `'.         |
-                   |__   __|      )        |
-                      | | ......-'        /
-                      | | \          _..'`
-                      | |  '------'''
-                      | |                      _
-                      |_|                     | |
- ___ _   _ _ __   ___ _ __          _ __   ___| |_ ___  _ __  ___
-/ __| | | | '_ \ / _ \ '__| ______ | '_ \ / _ \ __/ _ \| '_ \/ __|
-\__ \ |_| | |_) |  __/ |   |______|| | | |  __/ || (_) | |_) \__ \
-|___/\__,_| .__/ \___|_|           |_| |_|\___|\__\___/| .__/|___/
-          | |                                          | |
-          |_|                                          |_|
-
-Welcome to the f5-super-netops-container.  This image has the following
-services running:
-
- SSH  tcp/22
- HTTP tcp/80
-
-To access these services, you may need to remap ports on your host to the
-local container using the command:
-
- docker run -p 8080:80 -p 2222:22 -it f5devcentral/f5-super-netops-container:base
-
-From the HOST perspective, this results in:
-
- localhost:2222 -> f5-super-netops-container:22
- localhost:8080 -> f5-super-netops-container:80
-
-You can then connect using the following:
-
- HTTP: http://localhost:8080
- SSH:  ssh -p 2222 snops@localhost
-
-Default Credentials:
-
- snops/default
- root/default
-
-Go forth and automate!
-
-(you can now detach by using Ctrl+P+Q)
-
-[root@f5-super-netops] [/] #
-
-```
-4. Change directory to the user_repos.json mapped Repository ```cd /home/snops/Ansible_Meetups```
-5. Open Chrome from the ```Windows Host``` and validate the ```LAMP``` bookmark does not load, also verify via the ```BIG-IP A``` bookmark (Credentials admin/password) the configuration is blank, no objects exist yet
+3. Open Chrome from the ```Windows Host``` and validate the ```LAMP``` bookmark does not load, also verify via the ```BIG-IP A``` bookmark (Credentials admin/password) the configuration is blank, no objects exist yet
 ![image_005](/misc/images/image_005.png)
 ![image_011](/misc/images/image_011.png)
 6. Return to the MVP and run the Ansible ***operations*** Playbook with Helper Script ```./run_ansible.sh -o```
 7. Enter the Ansible-Vault password ```password```
-![image_006](/misc/images/image_006.png)
+![image_006](/misc/images/image_006n.png)
 8. Verify the Ansible Run success
-![image_007](/misc/images/image_007.png)
+![image_007](/misc/images/image_007n.png)
 9. Check BIG-IP A via the GUI for the newly created Node/Pool/Profiles/iRules and Virtual, and also the App_Svcs iApp deployment. The ```LAMP``` bookmark should also now function, loading the BIG-IP platform page
 10. Run the Ansible ***operations*** Teardown Playbook with Helper Script ```./run_ansible.sh -t```
 11. Enter the Ansible-Vault password ```password```
-![image_009](/misc/images/image_009.png)
+![image_009](/misc/images/image_009n.png)
 12. Verify the Ansible Run success
-![image_010](/misc/images/image_010.png)
+![image_010](/misc/images/image_010n.png)
 13. Check BIG-IP A via the GUI for the removed objects and iApp
 ![image_011](/misc/images/image_011.png)
 14. Demo complete, eat Cake.
