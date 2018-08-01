@@ -14,7 +14,7 @@
     policy_new_name: "exported_dev_waf_policy_v_1_0"
 
   vars_files:
-    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+    - /home/snops/Ansible_Meetups/variables.yml
 
   tasks:
     - name: Get ASM Policy ID

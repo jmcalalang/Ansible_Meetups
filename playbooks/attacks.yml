@@ -10,7 +10,7 @@
     virtualAddresses: "10.128.10.10"
 
   vars_files:
-    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+    - /home/snops/Ansible_Meetups/variables.yml
 
   tasks:
     - name: Curl VIP for URI /config

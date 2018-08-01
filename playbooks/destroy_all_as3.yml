@@ -10,7 +10,7 @@
     none: yet
 
   vars_files:
-    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+    - /home/snops/Ansible_Meetups/variables.yml
 
   tasks:
     - name: Wait a maximum of 300 seconds for BIG-IP to be ready to take configuration

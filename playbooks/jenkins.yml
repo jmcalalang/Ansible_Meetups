@@ -10,7 +10,7 @@
     none: yet
 
   vars_files:
-    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+    - /home/snops/Ansible_Meetups/variables.yml
 
   tasks:
     - name: Create local git email
@@ -23,21 +23,21 @@
 
     - name: Change permissions for declarations
       file:
-        path: /home/snops/SNOPS-Class-3/ansible/class3/files/as3/declarations
+        path: /home/snops/Ansible_Meetups/files/as3/declarations
         state: directory
         mode: '1777'
         recurse: yes
 
     - name: Change permissions for asm-policies
       file:
-        path: /home/snops/SNOPS-Class-3/ansible/class3/files/asm-policies
+        path: /home/snops/Ansible_Meetups/files/asm-policies
         state: directory
         mode: '1777'
         recurse: yes
 
     - name: Copy post-commit to .git of the local repository
       delegate_to: localhost
-      shell: "cp /home/snops/SNOPS-Class-3/ansible/class3/files/jenkins/post-commit /home/snops/SNOPS-Class-3/.git/hooks"
+      shell: "cp /home/snops/Ansible_Meetups/files/jenkins/post-commit /home/snops/SNOPS-Class-3/.git/hooks"
 
     - name: Change permissions for asm-policies
       file:
@@ -47,7 +47,7 @@
 
     - name: Copy Jenkins configuration Jobs to folder
       delegate_to: localhost
-      shell: "cp -rf /home/snops/SNOPS-Class-3/ansible/class3/files/jenkins/* /var/jenkins_home"
+      shell: "cp -rf /home/snops/Ansible_Meetups/files/jenkins/* /var/jenkins_home"
 
     - name: Change Owner of Jenkins Home
       file:

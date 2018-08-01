@@ -54,7 +54,7 @@ class BigIpRest(BigIpCommon):
 
 
         if resp.status_code == 200:
-	        f = open( "/home/snops/SNOPS-Class-3/ansible/class3/files/asm-policies/" + str(self._policy_new_name[0]) + ".xml","w")
+	        f = open( "/home/snops/Ansible_Meetups/files/asm-policies/" + str(self._policy_new_name[0]) + ".xml","w")
         	f.write(resp.text)
         	f.close()
 

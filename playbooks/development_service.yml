@@ -14,7 +14,7 @@
     waf_policy_name: "dev_waf_policy"
 
   vars_files:
-    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+    - /home/snops/Ansible_Meetups/variables.yml
 
   tasks:
     - name: Wait a maximum of 300 seconds for BIG-IP to be ready to take configuration
@@ -42,7 +42,7 @@
         server: "{{ inventory_hostname }}"
         user: "{{bigip_user}}"
         name: "{{waf_policy_name}}"
-        file: "/home/snops/SNOPS-Class-3/ansible/class3/files/asm-policies/{{dev_waf_policy_name}}"
+        file: "/home/snops/Ansible_Meetups/files/asm-policies/{{dev_waf_policy_name}}"
         active: yes
         state: present
         validate_certs: no
@@ -64,14 +64,14 @@
         bigip_auth_token: "{{ bigip_auth_response.json.token.token }}"
 
     - name: Prepare the AS3 declaration
-      template: src="/home/snops/SNOPS-Class-3/ansible/class3/files/as3/templates/application_template.json" dest="/home/snops/SNOPS-Class-3/ansible/class3/files/as3/declarations/application_declaration.json"
+      template: src="/home/snops/Ansible_Meetups/files/as3/templates/application_template.json" dest="/home/snops/Ansible_Meetups/files/as3/declarations/application_declaration.json"
       delegate_to: localhost
 
 
     - name: Deploy service_name (AS3 Build HTTPS/WAF Application) from AS3
       delegate_to: localhost
       uri:
-        body: "{{ lookup('file','/home/snops/SNOPS-Class-3/ansible/class3/files/as3/declarations/' + 'application_declaration.json') }}"
+        body: "{{ lookup('file','/home/snops/Ansible_Meetups/files/as3/declarations/' + 'application_declaration.json') }}"
         body_format: json
         headers:
           X-F5-Auth-Token: "{{ bigip_auth_token }}"
