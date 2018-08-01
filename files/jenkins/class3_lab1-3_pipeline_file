@@ -1,0 +1,62 @@
+node {
+   stage('deploy development service environment') {
+       //Use AS3 Declaration with Development Specified Variables
+      sh "cd /home/snops/SNOPS-Class-3/ansible/class3 && ansible-playbook -v /home/snops/SNOPS-Class-3/ansible/class3/playbooks/development_service.yml"
+      //chatops slack message that run has completed
+      slackSend(
+         channel: '#jenkins_builds',
+         color: 'good',
+         message: 'Development Service Environment has been deployed, ready for Testing',
+         teamDomain: 'f5agilitydevops',
+         token: 'vLMQmBq2tiyiCcZoNlbmAi0Z'
+         )
+   }
+   stage('proceed with testing ASM policy?') {
+      //Gate the process and require approval
+      input 'YES - (click proceed)'
+      //chatops slack message that run has completed
+      slackSend(
+          channel: '#jenkins_builds',
+          color: 'good',
+          message: 'SecOps has approved an Attack Test',
+          teamDomain: 'f5agilitydevops',
+          token: 'vLMQmBq2tiyiCcZoNlbmAi0Z'
+          )
+   }
+   stage('execute attack against development service environment') {
+       //Use AS3 Declaration with Development Specified Variables
+//      sh "cd /home/snops/SNOPS-Class-3/ansible/class3 && ansible-playbook -v /home/snops/SNOPS-Class-3/ansible/class3/playbooks/attacks.yml"
+      //chatops slack message that run has completed
+      slackSend(
+         channel: '#jenkins_builds',
+         color: 'good',
+         message: 'Attack Testing of Development Service sSarted',
+         teamDomain: 'f5agilitydevops',
+         token: 'vLMQmBq2tiyiCcZoNlbmAi0Z'
+         )
+   }
+   stage('development service environment policy modification needed') {
+      //Gate the process and require approval
+      input 'Approved Changes to ASM Policy? - YES - (click proceed)'
+      //chatops slack message that run has completed
+      slackSend(
+          channel: '#jenkins_builds',
+          color: 'good',
+          message: 'SevOps team has accepted the ASM policy',
+          teamDomain: 'f5agilitydevops',
+          token: 'vLMQmBq2tiyiCcZoNlbmAi0Z'
+          )
+   }
+   stage('export development service environment ASM policy to source control management') {
+       //Run SNOPS Container Newman Package add Node to Pool
+      sh "cd /home/snops/SNOPS-Class-3/ansible/class3 && ansible-playbook -v /home/snops/SNOPS-Class-3/ansible/class3/playbooks/export_asm_policy.yml"
+      //chatops slack message that run has completed
+      slackSend(
+         channel: '#jenkins_builds',
+         color: 'good',
+         message: 'New production ready policy is available, when ready commit new declaration variables',
+         teamDomain: 'f5agilitydevops',
+         token: 'vLMQmBq2tiyiCcZoNlbmAi0Z'
+         )
+   }
+}

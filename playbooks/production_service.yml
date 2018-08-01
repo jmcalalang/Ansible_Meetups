@@ -1,0 +1,81 @@
+# Create or update Production Service; AS3 Build Advanced HTTPS/WAF Application
+---
+
+- name: "Create or update Production Service; AS3 Build Advanced HTTPS/WAF Application"
+  hosts: bigips
+  gather_facts: False
+  connection: local
+
+  vars:
+    environmentState: "app_production"
+    serverAddresses: "10.128.20.20"
+    service_name: "app_production"
+    virtualAddresses: "10.128.10.20"
+    waf_policy_name: "prod_waf_policy"
+
+  vars_files:
+    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+
+  tasks:
+    - name: Wait a maximum of 300 seconds for BIG-IP to be ready to take configuration
+      bigip_wait:
+        password: "{{bigip_password}}"
+        server: "{{ inventory_hostname }}"
+        user: "{{bigip_user}}"
+        timeout: 300
+        validate_certs: no
+      delegate_to: localhost
+
+    - name: Provision ASM at "nominal" level
+      bigip_provision:
+        password: "{{bigip_password}}"
+        server: "{{ inventory_hostname }}"
+        user: "{{bigip_user}}"
+        module: asm
+        level: nominal
+        validate_certs: no
+      delegate_to: localhost
+
+    - name: Import and Activate {{prod_waf_policy_name}} ASM policy
+      bigip_asm_policy:
+        password: "{{bigip_password}}"
+        server: "{{ inventory_hostname }}"
+        user: "{{bigip_user}}"
+        name: "{{waf_policy_name}}"
+        file: "/home/snops/SNOPS-Class-3/ansible/class3/files/asm-policies/{{prod_waf_policy_name}}"
+        active: yes
+        state: present
+        validate_certs: no
+      delegate_to: localhost
+
+    - name: Get BIG-IP Authentication Token from {{server}}
+      delegate_to: localhost
+      uri:
+        body: '{"username":"{{bigip_user}}","password":"{{bigip_password}}","loginProvidername":"tmos"}'
+        body_format: json
+        method: POST
+        url: "https://{{ inventory_hostname }}/mgmt/shared/authn/login"
+        status_code: 200
+        validate_certs: no
+      register: bigip_auth_response
+
+    - name: Assign Auth Token to Variable
+      set_fact:
+        bigip_auth_token: "{{ bigip_auth_response.json.token.token }}"
+
+    - name: Prepare the AS3 declaration
+      template: src="/home/snops/SNOPS-Class-3/ansible/class3/files/as3/templates/application_template.json" dest="/home/snops/SNOPS-Class-3/ansible/class3/files/as3/declarations/application_declaration.json"
+      delegate_to: localhost
+
+
+    - name: Deploy service_name (AS3 Build HTTPS/WAF Application) from AS3
+      delegate_to: localhost
+      uri:
+        body: "{{ lookup('file','/home/snops/SNOPS-Class-3/ansible/class3/files/as3/declarations/' + 'application_declaration.json') }}"
+        body_format: json
+        headers:
+          X-F5-Auth-Token: "{{ bigip_auth_token }}"
+        method: POST
+        status_code: 200
+        url: "https://{{ inventory_hostname }}/mgmt/shared/appsvcs/declare"
+        validate_certs: no

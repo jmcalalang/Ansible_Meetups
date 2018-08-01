@@ -1,0 +1,26 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.21">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.53">
+    <script>node {
+   stage(&apos;destroy all as3 services&apos;) {
+       //Use AS3 Declaration with Development Specified Variables
+      sh &quot;cd /home/snops/SNOPS-Class-3/ansible/class3 &amp;&amp; ansible-playbook -v /home/snops/SNOPS-Class-3/ansible/class3/playbooks/destroy_all_as3.yml&quot;
+      //chatops slack message that run has completed
+      slackSend(
+         channel: &apos;#jenkins_builds&apos;,
+         color: &apos;bad&apos;,
+         message: &apos;All AS3 Services have been Destroyed&apos;,
+         teamDomain: &apos;f5agilitydevops&apos;,
+         token: &apos;vLMQmBq2tiyiCcZoNlbmAi0Z&apos;
+         )
+   }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>

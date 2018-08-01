@@ -1,0 +1,32 @@
+# Run Attacks on Services
+---
+
+- name: "Run Attacks on Services"
+  hosts: jenkins
+  gather_facts: False
+  connection: local
+
+  vars:
+    virtualAddresses: "10.128.10.10"
+
+  vars_files:
+    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+
+  tasks:
+    - name: Curl VIP for URI /config
+      command: curl -k https{{ ":" }}//{{ virtualAddresses }}/config
+      register: out
+      delegate_to: 127.0.0.1
+      run_once: true
+      until: out.rc == 0
+      retries: 120
+      delay: 30
+
+    - name: Curl VIP with colon against /usr/bin
+      command: curl -k -H 'Content-Type{{ ":" }} application/json; ls /usr/bin' https{{ ":" }}//{{ virtualAddresses }}
+      register: out
+      delegate_to: 127.0.0.1
+      run_once: true
+      until: out.rc == 0
+      retries: 120
+      delay: 30

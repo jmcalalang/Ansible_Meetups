@@ -1,0 +1,73 @@
+# Run Jenkins onboarding of Jobs
+---
+
+- name: "Run Jenkins onboarding of Jobs"
+  hosts: jenkins
+  gather_facts: False
+  connection: local
+
+  vars:
+    none: yet
+
+  vars_files:
+    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+
+  tasks:
+    - name: Create local git email
+      delegate_to: localhost
+      shell: "git config --global user.email c-3po@m.falcon"
+
+    - name: Create local git user
+      delegate_to: localhost
+      shell: "git config --global user.name c-3po"
+
+    - name: Change permissions for declarations
+      file:
+        path: /home/snops/SNOPS-Class-3/ansible/class3/files/as3/declarations
+        state: directory
+        mode: '1777'
+        recurse: yes
+
+    - name: Change permissions for asm-policies
+      file:
+        path: /home/snops/SNOPS-Class-3/ansible/class3/files/asm-policies
+        state: directory
+        mode: '1777'
+        recurse: yes
+
+    - name: Copy post-commit to .git of the local repository
+      delegate_to: localhost
+      shell: "cp /home/snops/SNOPS-Class-3/ansible/class3/files/jenkins/post-commit /home/snops/SNOPS-Class-3/.git/hooks"
+
+    - name: Change permissions for asm-policies
+      file:
+        path: /home/snops/SNOPS-Class-3/.git/hooks/post-commit
+        state: file
+        mode: '1777'
+
+    - name: Copy Jenkins configuration Jobs to folder
+      delegate_to: localhost
+      shell: "cp -rf /home/snops/SNOPS-Class-3/ansible/class3/files/jenkins/* /var/jenkins_home"
+
+    - name: Change Owner of Jenkins Home
+      file:
+        owner: jenkins
+        group: 1001
+        path: /var/jenkins_home
+        state: directory
+        mode: '1777'
+        recurse: yes
+
+    - name: Restart Jenkins
+      delegate_to: localhost
+      uri:
+        method: "POST"
+        url: "http://localhost:8080/restart"
+        user: snops
+        password: default
+        force_basic_auth: yes
+        status_code: 302
+      retries: 20
+      register: result
+      until: result | success
+      delay: 3

@@ -1,0 +1,50 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.21">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.53">
+    <script>node {
+   stage(&apos;proceed with testing ASM policy?&apos;) {
+      //Gate the process and require approval
+      input &apos;YES - (click me)&apos;
+      //chatops slack message that run has completed
+      slackSend(
+          channel: &apos;#jenkins_builds&apos;,
+          color: &apos;good&apos;,
+          message: &apos;SecOps has approved an Attack Test&apos;,
+          teamDomain: &apos;f5agilitydevops&apos;,
+          token: &apos;vLMQmBq2tiyiCcZoNlbmAi0Z&apos;
+          )
+   }
+   stage(&apos;execute attack against development service environment&apos;) {
+       //Use AS3 Declaration with Development Specified Variables
+//      sh &quot;cd /home/snops/SNOPS-Class-3/ansible/class3 &amp;&amp; ansible-playbook -v /home/snops/SNOPS-Class-3/ansible/class3/playbooks/attacks.yml&quot;
+      //chatops slack message that run has completed
+      slackSend(
+         channel: &apos;#jenkins_builds&apos;,
+         color: &apos;good&apos;,
+         message: &apos;Attack Testing of Development Service has Started&apos;,
+         teamDomain: &apos;f5agilitydevops&apos;,
+         token: &apos;vLMQmBq2tiyiCcZoNlbmAi0Z&apos;
+         )
+   }
+   stage(&apos;development service environment policy modification needed&apos;) {
+      //Gate the process and require approval
+      input &apos;Approved Changes to ASM Policy? - YES - (click me)&apos;
+      //chatops slack message that run has completed
+      slackSend(
+          channel: &apos;#jenkins_builds&apos;,
+          color: &apos;good&apos;,
+          message: &apos;SevOps team has accepted the ASM policy&apos;,
+          teamDomain: &apos;f5agilitydevops&apos;,
+          token: &apos;vLMQmBq2tiyiCcZoNlbmAi0Z&apos;
+          )
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>

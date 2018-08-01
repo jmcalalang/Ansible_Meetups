@@ -1,0 +1,48 @@
+# Create or update Production Service; AS3 Build Advanced HTTPS/WAF Application
+---
+
+- name: "Destroy all AS3 Services"
+  hosts: bigips
+  gather_facts: False
+  connection: local
+
+  vars:
+    none: yet
+
+  vars_files:
+    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+
+  tasks:
+    - name: Wait a maximum of 300 seconds for BIG-IP to be ready to take configuration
+      bigip_wait:
+        password: "{{bigip_password}}"
+        server: "{{ inventory_hostname }}"
+        user: "{{bigip_user}}"
+        timeout: 300
+        validate_certs: no
+      delegate_to: localhost
+
+    - name: Get BIG-IP Authentication Token from {{server}}
+      delegate_to: localhost
+      uri:
+        body: '{"username":"{{bigip_user}}","password":"{{bigip_password}}","loginProvidername":"tmos"}'
+        body_format: json
+        method: POST
+        url: "https://{{ inventory_hostname }}/mgmt/shared/authn/login"
+        status_code: 200
+        validate_certs: no
+      register: bigip_auth_response
+
+    - name: Assign Auth Token to Variable
+      set_fact:
+        bigip_auth_token: "{{ bigip_auth_response.json.token.token }}"
+
+    - name: Destroy all Services from AS3
+      delegate_to: localhost
+      uri:
+        headers:
+          X-F5-Auth-Token: "{{ bigip_auth_token }}"
+        method: DELETE
+        status_code: 200
+        url: "https://{{ inventory_hostname }}/mgmt/shared/appsvcs/declare/"
+        validate_certs: no

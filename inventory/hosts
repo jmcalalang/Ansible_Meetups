@@ -1,0 +1,8 @@
+[bigips]
+10.128.1.1
+
+[BIG-IPA]
+10.1.1.6
+
+[jenkins]
+localhost

@@ -1,0 +1,9 @@
+#Credentials
+bigip_user: "admin"
+bigip_password: "admin"
+jenkins_user: "snops"
+jenkins_password: "default"
+
+#ASM Policies
+dev_waf_policy_name: "demo-asm-policy-linux-low.xml"
+prod_waf_policy_name: "name_of_exported_waf_policy"

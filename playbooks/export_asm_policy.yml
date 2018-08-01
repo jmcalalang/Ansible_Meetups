@@ -1,0 +1,63 @@
+# Export ASM policy from BIG-IP
+# Pulls an asm policy from a bigip and saves it locally in the repo
+# Taken from https://github.com/fchmainy/secDevops/blob/master/exportPolicy.yaml
+
+---
+
+- name: "Export ASM policy from BIG-IP"
+  hosts: bigips
+  gather_facts: False
+  connection: local
+
+  vars:
+    waf_policy_name: "dev_waf_policy"
+    policy_new_name: "exported_dev_waf_policy_v_1_0"
+
+  vars_files:
+    - /home/snops/SNOPS-Class-3/ansible/class3/variables.yml
+
+  tasks:
+    - name: Get ASM Policy ID
+      f5_asm_getPolicyID:
+        server: "{{ inventory_hostname }}"
+        user: "{{ bigip_user }}"
+        password: "{{ bigip_password }}"
+        policyName: "{{ waf_policy_name }}"
+        validate_certs: no
+      register: policyId
+
+    - name: Register ASM Policy ID
+      f5_asm_exportPolicy:
+        server: "{{ inventory_hostname }}"
+        serviceName: "{{ waf_policy_name }}"
+        policyId: "{{policyId.policyId}}"
+        user: "{{ bigip_user }}"
+        password: "{{ bigip_password }}"
+        validate_certs: no
+      delegate_to: localhost
+      register: taskId
+
+    - name: Get status of the Policy ID Export
+      f5_asm_getStatus:
+        server: "{{ inventory_hostname }}"
+        taskId: "{{taskId.exportTask}}"
+        taskType: "export-policy"
+        user: "{{ bigip_user }}"
+        password: "{{ bigip_password }}"
+        validate_certs: no
+      delegate_to: localhost
+      register: myStatus
+      until: myStatus.taskStatus | default("COMPLETED")== "COMPLETED"
+      retries: 10
+      delay: 5
+
+    - name: Get exported ASM Policy Information
+      f5_asm_getExportedPolicy:
+        server: "{{ inventory_hostname }}"
+        serviceName: "{{ waf_policy_name }}"
+        user: "{{ bigip_user }}"
+        password: "{{ bigip_password }}"
+        validate_certs: no
+        policy_new_name: "{{ policy_new_name }}"
+      delegate_to: localhost
+      register: result
